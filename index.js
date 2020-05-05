@@ -3,11 +3,13 @@
 */
 
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
+const config = require('./config');
+const fs = require('fs');
 
-//the server should respond to all requests with a string
-const server = http.createServer((request, response) => {
+const unifiedServer = (request, response) => {
 
     // get url and parse it
     const parsedUrl = url.parse(request.url, true);
@@ -75,20 +77,38 @@ const server = http.createServer((request, response) => {
     });
 
     // console.log(request);
+};
+
+//instantiate servers
+const httpServer = http.createServer(unifiedServer);
+
+const httpsServerOptions = {
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./certificate.pem')
+};
+
+const httpsServer = https.createServer(httpsServerOptions, unifiedServer);
+
+//start the servers and have it listen on port from config
+httpServer.listen(config.httpPort, () => {
+    console.log('Http Server ist listening on port ' + config.httpPort);
 });
 
-//start theserver and have it listen on port 3000
-server.listen(3000, () => {
-    console.log('Server ist listening on port 3000.');
+httpsServer.listen(config.httpsPort, () => {
+    console.log('Https Server ist listening on port ' + config.httpsPort);
 });
 
 const handlers = {};
 
-handlers.scream = (data, callback) => {
+handlers.getRequestData = (data, callback) => {
     //callback a http status code, and a payload object
     callback(406, data);
 };
 
 handlers.notFound = (data, callback) => {
     callback(404);
+};
+
+handlers.ping = (data, callback) => {
+    callback();
 };
