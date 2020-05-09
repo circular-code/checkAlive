@@ -12,7 +12,18 @@ const fs = require('fs');
 const _data = require('./lib/data');
 
 //Testing
-//TODO: add testing
+// _data.create('test', 'newFile', {foo:'bar', fizz: 'buzz'}, (err) => {
+//     console.log('this was an error', err);
+// });
+// _data.read('test', 'newFile', (err, data) => {
+//     console.log('this was an error', err, 'and this is data', data);
+// });
+// _data.update('test', 'newFile', {foo1:'bar1', fizz1: 'buzz1'}, (err) => {
+//     console.log('this was the error', err);
+// });
+// _data.delete('test', 'newFile', (err) => {
+//     console.log('this was the error', err);
+// });
 
 const unifiedServer = (request, response) => {
 
