@@ -1,6 +1,6 @@
 /*
  * Create and export configuration variables
- *
+ * SET ENV Variables with  $env:NODE_ENV="production" on windows or NODE_ENV=production (or staging)
  */
 
 // Container for all the environments
