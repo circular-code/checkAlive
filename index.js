@@ -1,3 +1,4 @@
+'use strict';
 /*
 * Primary file for the API
 */
@@ -8,6 +9,10 @@ const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
 const fs = require('fs');
+const _data = require('./lib/data');
+
+//Testing
+//TODO: add testing
 
 const unifiedServer = (request, response) => {
 
@@ -83,8 +88,8 @@ const unifiedServer = (request, response) => {
 const httpServer = http.createServer(unifiedServer);
 
 const httpsServerOptions = {
-    key: fs.readFileSync('./key.pem'),
-    cert: fs.readFileSync('./certificate.pem')
+    key: fs.readFileSync('./https/key.pem'),
+    cert: fs.readFileSync('./https/certificate.pem')
 };
 
 const httpsServer = https.createServer(httpsServerOptions, unifiedServer);
