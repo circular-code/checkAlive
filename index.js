@@ -7,9 +7,11 @@ const http = require('http');
 const https = require('https');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
-const config = require('./config');
+const config = require('./lib/config');
 const fs = require('fs');
 const _data = require('./lib/data');
+const handlers = require('./lib/handlers');
+const utils = require('./lib/utils');
 
 //Testing
 // _data.create('test', 'newFile', {foo:'bar', fizz: 'buzz'}, (err) => {
@@ -54,7 +56,7 @@ const unifiedServer = (request, response) => {
     .on('error', (error) => {
         console.log(error);
     })
-    .on('end', (payload) => {
+    .on('end', () => {
         buffer += decoder.end();
 
         // choose the handler this request should go to, if none is found use the notFound handler
@@ -66,8 +68,10 @@ const unifiedServer = (request, response) => {
             queryParams,
             method,
             headers,
-            payload
+            payload: utils.parseJsonToObject(buffer)
         };
+
+        //TODO hier weitermachen
 
         //route the request to the handler specified in the router
         handler(data, (statusCode, payload) => {
@@ -113,18 +117,3 @@ httpServer.listen(config.httpPort, () => {
 httpsServer.listen(config.httpsPort, () => {
     console.log('Https Server ist listening on port ' + config.httpsPort);
 });
-
-const handlers = {};
-
-handlers.getRequestData = (data, callback) => {
-    //callback a http status code, and a payload object
-    callback(406, data);
-};
-
-handlers.notFound = (data, callback) => {
-    callback(404);
-};
-
-handlers.ping = (data, callback) => {
-    callback();
-};
