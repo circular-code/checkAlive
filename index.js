@@ -26,6 +26,9 @@ const utils = require('./lib/utils');
 // _data.delete('test', 'newFile', (err) => {
 //     console.log('this was the error', err);
 // });
+utils.sendTwilioSms('4158375309', 'test message', err => {
+    console.log('this was the error', err);
+});
 
 const unifiedServer = (request, response) => {
 
